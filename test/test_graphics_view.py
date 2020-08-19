@@ -15,7 +15,7 @@ class Window(QDialog):
 
         main_layout.addWidget(view)
 
-        self.resize(800, 800)
+        self.resize(1200, 1200)
         self.setLayout(main_layout)
         self.setWindowTitle("Sudoku Puzzle")
         self.show()
@@ -29,11 +29,14 @@ class View(QGraphicsView):
 
         self.setScene(self.scene)
 
-        self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
-        self.centerOn(self.scene.board)
-
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
+
+    def showEvent(self, e):
+        self.fitInView(self.scene.bounds, Qt.KeepAspectRatio)
+        self.centerOn(self.scene.board)
+
 
 class Scene(QGraphicsScene):
 
@@ -43,6 +46,8 @@ class Scene(QGraphicsScene):
         self.board = Board()
 
         self.addItem(self.board)
+
+        self.bounds = QRectF(0, 0, self.board.width * 1.1, self.board.height * 1.1)
 
 
 if __name__ == '__main__':
