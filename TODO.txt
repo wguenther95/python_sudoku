@@ -1,0 +1,23 @@
+Project Task List
+---------------------------------------------------------------------------------------------
+Tasks should be removed as they are completed.
+
+Last Edited: August 27th, 2020
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+GUI Features:
+
+Selectable cells which remain active after mouse exits QGraphicsObject.
+Blinking cursor on active cell.
+Different font when cell answer is incorrect after backtracking algorithm.
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+Source Features:
+
+Integrate backtracking algorithm as well as board generator.
+Integrate difficulty selector.
+Determine when to run backtracker algorithm and how to display correct answers.

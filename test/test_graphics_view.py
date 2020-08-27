@@ -1,8 +1,11 @@
 from PyQt5.QtWidgets import QApplication, QDialog, QGraphicsView, QGraphicsScene, QHBoxLayout
 from PyQt5.QtCore import Qt, QRectF
 import sys
+import os
 
 from test_graphics_objects import Board
+
+QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 
 
 class Window(QDialog):
@@ -34,11 +37,12 @@ class View(QGraphicsView):
         self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
 
     def showEvent(self, e):
-        self.fitInView(self.scene.bounds, Qt.KeepAspectRatio)
-        self.centerOn(self.scene.board)
+        self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
 
 
 class Scene(QGraphicsScene):
+
+    scene_rect_buffer = 1.1
 
     def __init__(self):
         super(QGraphicsScene, self).__init__()
@@ -47,7 +51,8 @@ class Scene(QGraphicsScene):
 
         self.addItem(self.board)
 
-        self.bounds = QRectF(0, 0, self.board.width * 1.1, self.board.height * 1.1)
+        self.setSceneRect(QRectF(0, 0, self.board.width * self.scene_rect_buffer, self.board.height * self.scene_rect_buffer))
+        self.board.setPos(self.sceneRect().width() / 2 - self.board.width / 2, self.sceneRect().height() / 2 - self.board.height / 2)
 
 
 if __name__ == '__main__':

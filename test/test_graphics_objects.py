@@ -88,8 +88,9 @@ class NumberItem(SudokuItem):
         self.animations()
 
         self.setAcceptHoverEvents(True)
-        self.setFlags(QGraphicsItem.ItemIsFocusable)
+        self.setFlags(QGraphicsItem.ItemIsFocusable | QGraphicsItem.ItemIsSelectable)
         self.setCacheMode(QGraphicsItem.DeviceCoordinateCache)
+        self.setTransformOriginPoint(self.rect.center())
 
     def paint(self, painter, option, widget):
         pen = QPen(Qt.black, 1)
@@ -107,7 +108,7 @@ class NumberItem(SudokuItem):
         return self.rect.adjusted(-self.adj, -self.adj, self.adj, self.adj)
 
     def hoverEnterEvent(self, e):
-        self.setFocus(Qt.MouseFocusReason)
+        self.setFocus()
         self.setCursor(Qt.IBeamCursor)
         self.start_animations(QAbstractAnimation.Forward)
 
@@ -119,23 +120,24 @@ class NumberItem(SudokuItem):
         self.setCursor(Qt.ArrowCursor)
         self.start_animations(QAbstractAnimation.Backward)
 
+    def mousePressEvent(self, e):
+        self.setSelected(True)
+
+    def keyPressEvent(self, e):
+        if self.isSelected():
+            if e.key() == 16777219 or e.key() == 16777223:
+                self.num = ''
+            elif e.key() >= 49 and e.key() <= 57:
+                self.num = str(e.key() - 48)
+            self.update()
+
     def animations(self):
-        scale_value = 1.02
+        scale_value = 1.1
         self.scale_anim = QPropertyAnimation(self, b'scale')
-        self.scale_anim.setDuration(500)
+        self.scale_anim.setDuration(100)
         self.scale_anim.setStartValue(1)
         self.scale_anim.setEndValue(scale_value)
 
-        x = scale_value * self.rect.x() - self.rect.x()
-        y = scale_value * self.rect.y() - self.rect.y()
-
-        self.pos_anim = QPropertyAnimation(self, b'pos')
-        self.pos_anim.setDuration(500)
-        self.pos_anim.setStartValue(self.pos())
-        self.pos_anim.setEndValue(QPointF(x, y))
-
     def start_animations(self, direction: QAbstractAnimation):
         self.scale_anim.setDirection(direction)
-        self.pos_anim.setDirection(direction)
         self.scale_anim.start()
-        self.pos_anim.start()
