@@ -9,7 +9,6 @@ Last Edited: August 27th, 2020
 
 GUI Features:
 
-Selectable cells which remain active after mouse exits QGraphicsObject.
 Blinking cursor on active cell.
 Different font when cell answer is incorrect after backtracking algorithm.
 
