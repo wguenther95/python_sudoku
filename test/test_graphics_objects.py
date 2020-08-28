@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsGridLayout, QGraphicsItem, QStyleOptionGraphicsItem, QGraphicsObject
-from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor
+from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont
 from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF
 
 from test_performance_timer import PerformanceTimer
@@ -77,6 +77,7 @@ class Grid(SudokuItem):
 class NumberItem(SudokuItem):
 
     adj = 5
+    hover = False
 
     def __init__(self, parent, row, col, num, rect: QRectF):
         super().__init__(parent=parent)
@@ -94,21 +95,31 @@ class NumberItem(SudokuItem):
 
     def paint(self, painter, option, widget):
         pen = QPen(Qt.black, 1)
-        if self.hasFocus():
-            brush = QBrush(Qt.gray, Qt.SolidPattern)
+        if self.hover:
+            brush = QBrush(QColor(140, 190, 220), Qt.SolidPattern)
         else:
             brush = QBrush(Qt.NoBrush)
+        if self.isSelected():
+            width = self.rect.width() * 1.1
+            height = self.rect.height() * 1.1
+            x = self.rect.x() - ((width - self.rect.width()) / 2)
+            y = self.rect.y() - ((height - self.rect.height()) / 2)
+            rect = QRectF(x, y, width, height)
+            brush = QBrush(QColor(30, 150, 215), Qt.SolidPattern)
+        else:
+            rect = self.rect
         painter.setPen(pen)
         painter.setBrush(brush)
+        painter.setFont(QFont('Helvetica', 14, 50))
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.drawEllipse(self.rect)
-        painter.drawText(self.rect, Qt.AlignCenter, f'{self.num}')
+        painter.drawEllipse(rect)
+        painter.drawText(rect, Qt.AlignCenter, f'{self.num}')
 
     def boundingRect(self):
         return self.rect.adjusted(-self.adj, -self.adj, self.adj, self.adj)
 
     def hoverEnterEvent(self, e):
-        self.setFocus()
+        self.hover = True
         self.setCursor(Qt.IBeamCursor)
         self.start_animations(QAbstractAnimation.Forward)
 
@@ -116,15 +127,22 @@ class NumberItem(SudokuItem):
         pass
 
     def hoverLeaveEvent(self, e):
-        self.clearFocus()
+        self.hover = False
         self.setCursor(Qt.ArrowCursor)
         self.start_animations(QAbstractAnimation.Backward)
 
     def mousePressEvent(self, e):
+        # Clear any item that may be selected that belongs to the same parent.
+        # Also, remove the focus from that item.
+        for item in self.parent.childItems():
+            item.setSelected(False)
+            item.setFocus(False)
+        # Set the current item as selected, and give it focus.
         self.setSelected(True)
+        self.setFocus(True)
 
     def keyPressEvent(self, e):
-        if self.isSelected():
+        if self.hasFocus():
             if e.key() == 16777219 or e.key() == 16777223:
                 self.num = ''
             elif e.key() >= 49 and e.key() <= 57:
