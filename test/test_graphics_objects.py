@@ -1,10 +1,11 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsGridLayout, QGraphicsItem, QStyleOptionGraphicsItem, QGraphicsObject
 from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont
-from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF
+from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer
+
+from time import time
 
 from test_performance_timer import PerformanceTimer
-
-timer = PerformanceTimer()
+from test_generator import SudokuGenerator
 
 
 class SudokuItem(QGraphicsObject):
@@ -22,6 +23,11 @@ class Board(SudokuItem):
     def __init__(self):
         super().__init__()
 
+        # Create the sudoku generator object and generate a board.
+        self.game = SudokuGenerator()
+        # self.game.print()
+
+        # Add a grid to populate with the Sudoku board.
         self.grid = Grid(self)
 
     def paint(self, painter, option, widget):
@@ -53,13 +59,17 @@ class Grid(SudokuItem):
             ni_row = []
             rect_row = []
             for j in range(9):
-                x = (self.parent.width / 9) * i
-                y = (self.parent.height / 9) * j
+                disabled = False
+                x = (self.parent.width / 9) * j
+                y = (self.parent.height / 9) * i
                 width = self.parent.width / 9
                 height = self.parent.height / 9
                 rect = QRectF(x, y, width, height)
+                num = self.parent.game.board[i][j]
+                if num != 0:
+                    disabled = True
                 rect_row.append(rect)
-                ni_row.append(NumberItem(self, i, j, i, rect))
+                ni_row.append(NumberItem(self, i, j, num, rect, disabled))
             self.number_items.append(ni_row)
             self.rects.append(rect_row)
 
@@ -79,26 +89,33 @@ class NumberItem(SudokuItem):
     adj = 5
     hover = False
 
-    def __init__(self, parent, row, col, num, rect: QRectF):
+    def __init__(self, parent, row, col, num, rect: QRectF, disabled=False):
         super().__init__(parent=parent)
         self.rect = rect.adjusted(self.adj, self.adj, -self.adj, -self.adj)
+        self.disabled = disabled
         self.row = row
         self.col = col
-        self.num = num
+
+        if num == 0:
+            self.num = ''
+        else:
+            self.num = num
 
         self.animations()
 
+        if not self.disabled:
+            self.setFlags(QGraphicsItem.ItemIsFocusable | QGraphicsItem.ItemIsSelectable)
         self.setAcceptHoverEvents(True)
-        self.setFlags(QGraphicsItem.ItemIsFocusable | QGraphicsItem.ItemIsSelectable)
         self.setCacheMode(QGraphicsItem.DeviceCoordinateCache)
         self.setTransformOriginPoint(self.rect.center())
 
     def paint(self, painter, option, widget):
         pen = QPen(Qt.black, 1)
+        brush = QBrush(Qt.NoBrush)
+        if self.disabled:
+            brush = QBrush(QColor(200, 200, 200), Qt.SolidPattern)
         if self.hover:
             brush = QBrush(QColor(140, 190, 220), Qt.SolidPattern)
-        else:
-            brush = QBrush(Qt.NoBrush)
         if self.isSelected():
             width = self.rect.width() * 1.1
             height = self.rect.height() * 1.1
@@ -119,17 +136,19 @@ class NumberItem(SudokuItem):
         return self.rect.adjusted(-self.adj, -self.adj, self.adj, self.adj)
 
     def hoverEnterEvent(self, e):
-        self.hover = True
-        self.setCursor(Qt.IBeamCursor)
-        self.start_animations(QAbstractAnimation.Forward)
+        if not self.disabled:
+            self.hover = True
+            self.setCursor(Qt.IBeamCursor)
+            self.start_animations(QAbstractAnimation.Forward)
 
     def hoverMoveEvent(self, e):
         pass
 
     def hoverLeaveEvent(self, e):
-        self.hover = False
-        self.setCursor(Qt.ArrowCursor)
-        self.start_animations(QAbstractAnimation.Backward)
+        if not self.disabled:
+            self.hover = False
+            self.setCursor(Qt.ArrowCursor)
+            self.start_animations(QAbstractAnimation.Backward)
 
     def mousePressEvent(self, e):
         # Clear any item that may be selected that belongs to the same parent.

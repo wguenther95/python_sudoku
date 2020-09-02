@@ -2,6 +2,7 @@ import time
 
 
 class PerformanceTimer:
+
     def __init__(self):
         pass
 
