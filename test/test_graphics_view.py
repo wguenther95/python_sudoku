@@ -1,25 +1,26 @@
-from PyQt5.QtWidgets import QApplication, QDialog, QGraphicsView, QGraphicsScene, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QHBoxLayout
 from PyQt5.QtCore import Qt, QRectF
 import sys
 import os
 
 from test_graphics_objects import Board
+from test_dock_widget import DifficultySelect
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 
 
-class Window(QDialog):
+class Window(QMainWindow):
     def __init__(self):
-        super(QDialog, self).__init__()
-
-        main_layout = QHBoxLayout()
+        super(QMainWindow, self).__init__()
 
         view = View()
 
-        main_layout.addWidget(view)
+        self.setCentralWidget(view)
+
+        self.diff_select = DifficultySelect()
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.diff_select)
 
         self.resize(1200, 1200)
-        self.setLayout(main_layout)
         self.setWindowTitle("Sudoku Puzzle")
         self.show()
 
