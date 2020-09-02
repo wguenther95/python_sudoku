@@ -18,4 +18,6 @@ Different font when cell answer is incorrect after backtracking algorithm.
 Source Features:
 
 Integrate difficulty selector.
+Implement a score keeper, or timer.
 Determine when to run backtracker algorithm and how to display correct answers.
+On application start, generate easy board, then allow the user to change the difficulty and generate new board if desired.
