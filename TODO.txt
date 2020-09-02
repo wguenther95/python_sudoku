@@ -17,6 +17,5 @@ Different font when cell answer is incorrect after backtracking algorithm.
 
 Source Features:
 
-Integrate backtracking algorithm as well as board generator.
 Integrate difficulty selector.
 Determine when to run backtracker algorithm and how to display correct answers.
