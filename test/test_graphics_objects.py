@@ -172,6 +172,7 @@ class NumberItem(SudokuItem):
         if self.hasFocus():
             if e.key() == 16777219 or e.key() == 16777223:
                 self.num = ''
+                # print(self.parent.parent.game.board)
             elif e.key() >= 49 and e.key() <= 57:
                 self.num = str(e.key() - 48)
             self.update()
