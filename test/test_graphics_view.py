@@ -5,6 +5,7 @@ import os
 
 from test_graphics_objects import Board
 from test_dock_widget import DifficultySelect
+from test_generator import Difficulty
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 
@@ -13,16 +14,36 @@ class Window(QMainWindow):
     def __init__(self):
         super(QMainWindow, self).__init__()
 
-        view = View()
+        self.view = View()
 
-        self.setCentralWidget(view)
+        self.setCentralWidget(self.view)
 
         self.diff_select = DifficultySelect()
+        self.diff_select.start_new_game.connect(self.new_game)
+
         self.addDockWidget(Qt.LeftDockWidgetArea, self.diff_select)
 
         self.resize(1200, 1200)
         self.setWindowTitle("Sudoku Puzzle")
         self.show()
+
+    def new_game(self):
+        # Current board being used for game
+        board = self.view.scene.board
+
+        # Set the difficulty for the current game.
+        diff = self.diff_select.difficulty_cb.currentText()
+
+        if diff == 'Easy':
+            board.game.difficulty = Difficulty.EASY
+        elif diff == 'Medium':
+            board.game.difficulty = Difficulty.MEDIUM
+        else:
+            board.game.difficulty = Difficulty.HARD
+
+        # Generate a new game board and update the grid with this board.
+        board.game.new_board()
+        board.grid.update()
 
 
 class View(QGraphicsView):

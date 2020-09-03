@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import QDockWidget, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QGroupBox, QComboBox, QLabel
-from PyQt5.QtCore import Qt, QRectF
-
+from PyQt5.QtCore import Qt, QRectF, pyqtSignal
 
 class DifficultySelect(QDockWidget):
+
+    start_new_game = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
@@ -15,10 +17,11 @@ class DifficultySelect(QDockWidget):
         self.difficulty_cb.addItem("Medium")
         self.difficulty_cb.addItem("Hard")
 
-        self.generate_bt = QPushButton("Generate Board")
+        self.new_game = QPushButton("New Game")
+        self.new_game.clicked.connect(self.new_game_clicked)
 
         layout.addWidget(self.difficulty_cb)
-        layout.addWidget(self.generate_bt)
+        layout.addWidget(self.new_game)
 
         diff_widget.setLayout(layout)
 
@@ -30,3 +33,6 @@ class DifficultySelect(QDockWidget):
         # self.setFloating(False)
         self.setFeatures(QDockWidget.NoDockWidgetFeatures)
         self.setFixedSize(150, 150)
+
+    def new_game_clicked(self):
+        self.start_new_game.emit()

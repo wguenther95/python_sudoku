@@ -31,6 +31,8 @@ class Board(SudokuItem):
         self.grid = Grid(self)
 
     def paint(self, painter, option, widget):
+        painter.fillRect(self.boundingRect(), Qt.white)
+
         pen = QPen(Qt.black, 3)
         painter.setPen(pen)
         painter.setRenderHint(QPainter.Antialiasing)
@@ -52,6 +54,9 @@ class Grid(SudokuItem):
 
     def __init__(self, parent):
         super().__init__(parent=parent)
+        self.update()
+
+    def update(self):
         self.number_items = []
         self.rects = []
 
@@ -125,6 +130,9 @@ class NumberItem(SudokuItem):
             brush = QBrush(QColor(30, 150, 215), Qt.SolidPattern)
         else:
             rect = self.rect
+        # Fill in the background, so items don't remain painted in the case of a new game initialization.
+        painter.fillRect(rect, Qt.white)
+
         painter.setPen(pen)
         painter.setBrush(brush)
         painter.setFont(QFont('Helvetica', 14, 50))

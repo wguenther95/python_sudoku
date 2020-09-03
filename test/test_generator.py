@@ -10,10 +10,9 @@ class Difficulty(Enum):
 
 class SudokuGenerator:
 
-    def __init__(self, difficulty=Difficulty.EASY):
-        self.board = [[0 for col in range(9)] for row in range(9)]
-        self.solve(self.board)
-        self.generate(difficulty)
+    def __init__(self):
+        self.difficulty = Difficulty.EASY
+        self.new_board()
 
     def print(self):
         for row in self.board:
@@ -43,13 +42,13 @@ class SudokuGenerator:
 
         return False
 
-    def generate(self, difficulty):
+    def generate(self):
         # Easy sudoku boards will contain 36 clues, medium will contain 31 clues, and hard will contain 22 clues.
-        if difficulty == Difficulty.EASY:
+        if self.difficulty == Difficulty.EASY:
             counter = 81 - 37
-        elif difficulty == Difficulty.MEDIUM:
+        elif self.difficulty == Difficulty.MEDIUM:
             counter = 81 - 32
-        elif difficulty == Difficulty.HARD:
+        elif self.difficulty == Difficulty.HARD:
             counter = 81 - 23
 
         while counter >= 0:
@@ -113,6 +112,11 @@ class SudokuGenerator:
                     return i, j
 
         return None
+
+    def new_board(self):
+        self.board = [[0 for col in range(9)] for row in range(9)]
+        self.solve(self.board)
+        self.generate()
 
 
 if __name__ == '__main__':
