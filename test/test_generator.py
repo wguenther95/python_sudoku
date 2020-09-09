@@ -103,6 +103,12 @@ class SudokuGenerator:
 
         return num not in grid_vals
 
+    def check_input(self, num, row, col, board):
+        if self.check_row(num, row, board) and self.check_grid(num, row, col, board) and self.check_column(num, col, board):
+            return True
+        else:
+            return False
+
     def find_empty(self, board):
         # For every row on the board
         for i in range(len(board)):

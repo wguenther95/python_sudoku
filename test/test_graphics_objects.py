@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont
 from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer
 
 from time import time
+from copy import deepcopy
 
 from test_performance_timer import PerformanceTimer
 from test_generator import SudokuGenerator
@@ -93,6 +94,7 @@ class NumberItem(SudokuItem):
 
     adj = 5
     hover = False
+    valid_input = True
 
     def __init__(self, parent, row, col, num, rect: QRectF, disabled=False):
         super().__init__(parent=parent)
@@ -100,6 +102,9 @@ class NumberItem(SudokuItem):
         self.disabled = disabled
         self.row = row
         self.col = col
+
+        # Create a link to the sudoku game instance.
+        self.game = self.parent.parent.game
 
         if num == 0:
             self.num = ''
@@ -115,29 +120,38 @@ class NumberItem(SudokuItem):
         self.setTransformOriginPoint(self.rect.center())
 
     def paint(self, painter, option, widget):
-        pen = QPen(Qt.black, 1)
+        # Change font color when user input is false.
+        # Default pen color is set to black.
+        black_pen = QPen(Qt.black, 1)
+        red_pen = QPen(Qt.red, 1)
+
+        painter.setPen(black_pen)
+
         brush = QBrush(Qt.NoBrush)
         if self.disabled:
             brush = QBrush(QColor(200, 200, 200), Qt.SolidPattern)
         if self.hover:
-            brush = QBrush(QColor(140, 190, 220), Qt.SolidPattern)
+            brush = QBrush(QColor(160, 200, 255), Qt.SolidPattern)
         if self.isSelected():
             width = self.rect.width() * 1.1
             height = self.rect.height() * 1.1
             x = self.rect.x() - ((width - self.rect.width()) / 2)
             y = self.rect.y() - ((height - self.rect.height()) / 2)
             rect = QRectF(x, y, width, height)
-            brush = QBrush(QColor(30, 150, 215), Qt.SolidPattern)
+            brush = QBrush(QColor(160, 200, 255), Qt.SolidPattern)
         else:
             rect = self.rect
         # Fill in the background, so items don't remain painted in the case of a new game initialization.
         painter.fillRect(rect, Qt.white)
 
-        painter.setPen(pen)
         painter.setBrush(brush)
         painter.setFont(QFont('Helvetica', 14, 50))
         painter.setRenderHint(QPainter.Antialiasing)
         painter.drawEllipse(rect)
+
+        if not self.valid_input:
+            painter.setPen(red_pen)
+
         painter.drawText(rect, Qt.AlignCenter, f'{self.num}')
 
     def boundingRect(self):
@@ -172,9 +186,16 @@ class NumberItem(SudokuItem):
         if self.hasFocus():
             if e.key() == 16777219 or e.key() == 16777223:
                 self.num = ''
-                # print(self.parent.parent.game.board)
             elif e.key() >= 49 and e.key() <= 57:
                 self.num = str(e.key() - 48)
+
+                if self.game.check_input(int(self.num), self.row, self.col, self.game.board):
+                    self.valid_input = True
+                else:
+                    self.valid_input = False
+
+                self.game.board[self.row][self.col] = int(self.num)
+
             self.update()
 
     def animations(self):
