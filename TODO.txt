@@ -9,13 +9,14 @@ Last Edited: August 27th, 2020
 
 GUI Features:
 
-Blinking cursor on active cell.
-Different font when cell answer is incorrect after backtracking algorithm.
+Highlight values which conflict with invalid user input in red after backtracking.
 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 
 Source Features:
 
-Implement a score keeper, or timer.
 Determine when to run backtracker algorithm and how to display correct answers.
+Implement a button to solve the board for the user. 
+Implement a hint feature, which chooses a random empty cell, and finds a correct value for that cell. 
+Implement scaling so that moving between different resolutions doesn't cause issues with resizing. 

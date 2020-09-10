@@ -1,13 +1,14 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QHBoxLayout, QStyleFactory
 from PyQt5.QtCore import Qt, QRectF
 import sys
 import os
 
 from test_graphics_objects import Board
-from test_dock_widget import DifficultySelect
+from test_dock_widget import GameControl
 from test_generator import Difficulty
 
-QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
 
 class Window(QMainWindow):
@@ -18,10 +19,10 @@ class Window(QMainWindow):
 
         self.setCentralWidget(self.view)
 
-        self.diff_select = DifficultySelect()
-        self.diff_select.start_new_game.connect(self.new_game)
+        self.game_control = GameControl()
+        self.game_control.start_new_game.connect(self.new_game)
 
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.diff_select)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.game_control)
 
         self.resize(1200, 1200)
         self.setWindowTitle("Sudoku Puzzle")
@@ -32,7 +33,7 @@ class Window(QMainWindow):
         board = self.view.scene.board
 
         # Set the difficulty for the current game.
-        diff = self.diff_select.difficulty_cb.currentText()
+        diff = self.game_control.difficulty_cb.currentText()
 
         if diff == 'Easy':
             board.game.difficulty = Difficulty.EASY

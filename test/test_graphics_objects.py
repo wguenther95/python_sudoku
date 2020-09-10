@@ -5,7 +5,6 @@ from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimat
 from time import time
 from copy import deepcopy
 
-from test_performance_timer import PerformanceTimer
 from test_generator import SudokuGenerator
 
 
