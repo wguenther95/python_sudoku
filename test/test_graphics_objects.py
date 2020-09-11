@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsGridLayout, QGraphicsItem, QStyleOptionGraphicsItem, QGraphicsObject
-from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont
+from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont, QPainterPath
 from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer
 
 from time import time
@@ -241,8 +241,15 @@ class GameOverOverlay(QGraphicsObject):
         return QRectF(0, 0, self.width, self.height)
 
     def paint(self, painter, option, widget):
-        pen = QPen(Qt.black, 1)
+        pen = QPen(Qt.black, 5)
         brush = QBrush(QColor(255, 255, 255), Qt.SolidPattern)
+        font = (QFont('Helvetica', 14, 50))
         painter.setPen(pen)
         painter.setBrush(brush)
-        painter.drawRect(QRectF(self.x, self.y, self.width, self.height))
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        path = QPainterPath()
+        path.addRoundedRect(QRectF(self.x, self.y, self.width, self.height), 10, 10)
+        path.addText(self.x, self.y, font, "Solution Found!")
+        painter.drawPath(path)
+        painter.fillPath(path, QColor(200, 255, 180))
