@@ -8,6 +8,7 @@ from test_digital_timer import DigitalTimer
 class GameControl(QDockWidget):
 
     start_new_game = pyqtSignal()
+    solve = pyqtSignal()
     width = 150
 
     def __init__(self):
@@ -25,12 +26,16 @@ class GameControl(QDockWidget):
         self.new_game = QPushButton("New Game")
         self.new_game.clicked.connect(self.new_game_clicked)
 
+        self.solve_puzzle = QPushButton("Solve")
+        self.solve_puzzle.clicked.connect(self.solve_clicked)
+
         self.timer = DigitalTimer()
 
         spacer = QSpacerItem(self.width, 400, QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         layout.addWidget(self.difficulty_cb)
         layout.addWidget(self.new_game)
+        layout.addWidget(self.solve_puzzle)
         layout.addSpacerItem(spacer)
         layout.addWidget(self.timer)
 
@@ -47,3 +52,6 @@ class GameControl(QDockWidget):
     def new_game_clicked(self):
         self.start_new_game.emit()
         self.timer.restart()
+
+    def solve_clicked(self):
+        self.solve.emit()

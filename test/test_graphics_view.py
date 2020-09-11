@@ -2,8 +2,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsS
 from PyQt5.QtCore import Qt, QRectF
 import sys
 import os
+from copy import deepcopy
 
-from test_graphics_objects import Board
+from test_graphics_objects import Board, GameOverOverlay
 from test_dock_widget import GameControl
 from test_generator import Difficulty
 
@@ -21,6 +22,7 @@ class Window(QMainWindow):
 
         self.game_control = GameControl()
         self.game_control.start_new_game.connect(self.new_game)
+        self.game_control.solve.connect(self.solve_game)
 
         self.addDockWidget(Qt.LeftDockWidgetArea, self.game_control)
 
@@ -45,6 +47,19 @@ class Window(QMainWindow):
         # Generate a new game board and update the grid with this board.
         board.game.new_board()
         board.grid.update()
+
+        self.game_control.solve_puzzle.setEnabled(True)
+
+    def solve_game(self):
+        game = self.view.scene.board.game
+
+        solved_board = deepcopy(game.initial_board)
+
+        if game.solve(solved_board):
+            self.view.scene.board.grid.show_solution(solved_board, game.initial_board)
+            self.game_control.timer.pause()
+            self.game_control.solve_puzzle.setEnabled(False)
+            GameOverOverlay(self.view.scene.board)
 
 
 class View(QGraphicsView):

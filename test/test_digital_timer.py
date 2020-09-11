@@ -25,3 +25,7 @@ class DigitalTimer(QLCDNumber):
         self.time = QTime(0, 0, 0, 0)
         self.string = self.time.toString('mm:ss')
         self.display(self.string)
+        self.timer.start(1000)
+
+    def pause(self):
+        self.timer.stop()

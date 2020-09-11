@@ -124,6 +124,8 @@ class SudokuGenerator:
         self.solve(self.board)
         self.generate()
 
+        self.initial_board = deepcopy(self.board)
+
 
 if __name__ == '__main__':
     sud = SudokuGenerator()

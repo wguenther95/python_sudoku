@@ -78,6 +78,28 @@ class Grid(SudokuItem):
             self.number_items.append(ni_row)
             self.rects.append(rect_row)
 
+    def show_solution(self, solved_board, initial_board):
+        self.number_items = []
+        self.rects = []
+
+        for i in range(9):
+            ni_row = []
+            rect_row = []
+            for j in range(9):
+                disabled = True
+                if (initial_board[i][j] == 0):
+                    disabled = False
+                x = (self.parent.width / 9) * j
+                y = (self.parent.height / 9) * i
+                width = self.parent.width / 9
+                height = self.parent.height / 9
+                rect = QRectF(x, y, width, height)
+                num = solved_board[i][j]
+                rect_row.append(rect)
+                ni_row.append(NumberItem(self, i, j, num, rect, disabled))
+            self.number_items.append(ni_row)
+            self.rects.append(rect_row)
+
     def paint(self, painter, option, widget):
         pen = QPen(Qt.black, 1)
         painter.setPen(pen)
@@ -92,7 +114,6 @@ class Grid(SudokuItem):
 class NumberItem(SudokuItem):
 
     adj = 5
-    hover = False
     valid_input = True
 
     def __init__(self, parent, row, col, num, rect: QRectF, disabled=False):
@@ -129,8 +150,6 @@ class NumberItem(SudokuItem):
         brush = QBrush(Qt.NoBrush)
         if self.disabled:
             brush = QBrush(QColor(200, 200, 200), Qt.SolidPattern)
-        if self.hover:
-            brush = QBrush(QColor(160, 200, 255), Qt.SolidPattern)
         if self.isSelected():
             width = self.rect.width() * 1.1
             height = self.rect.height() * 1.1
@@ -158,7 +177,6 @@ class NumberItem(SudokuItem):
 
     def hoverEnterEvent(self, e):
         if not self.disabled:
-            self.hover = True
             self.setCursor(Qt.IBeamCursor)
             self.start_animations(QAbstractAnimation.Forward)
 
@@ -167,7 +185,6 @@ class NumberItem(SudokuItem):
 
     def hoverLeaveEvent(self, e):
         if not self.disabled:
-            self.hover = False
             self.setCursor(Qt.ArrowCursor)
             self.start_animations(QAbstractAnimation.Backward)
 
@@ -207,3 +224,25 @@ class NumberItem(SudokuItem):
     def start_animations(self, direction: QAbstractAnimation):
         self.scale_anim.setDirection(direction)
         self.scale_anim.start()
+
+
+class GameOverOverlay(QGraphicsObject):
+
+    width = Board().width * 2 / 3
+    height = Board().height * 1 / 4
+
+    def __init__(self, board):
+        super().__init__(parent=board)
+
+        self.x = (Board().width - self.width) / 2
+        self.y = (Board().height / 2) + (Board().height / 6)
+
+    def boundingRect(self):
+        return QRectF(0, 0, self.width, self.height)
+
+    def paint(self, painter, option, widget):
+        pen = QPen(Qt.black, 1)
+        brush = QBrush(QColor(255, 255, 255), Qt.SolidPattern)
+        painter.setPen(pen)
+        painter.setBrush(brush)
+        painter.drawRect(QRectF(self.x, self.y, self.width, self.height))
