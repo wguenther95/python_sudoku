@@ -78,6 +78,11 @@ class Window(QMainWindow):
             self.game_over.setVisible(True)
 
     def hint(self):
+        # Make sure all focused and selected items are cleared upon requesting hint.
+        for item in self.view.scene.board.grid.childItems():
+            item.setSelected(False)
+            item.setFocus(False)
+
         game = self.view.scene.board.game
         if game.hint(game.board):
             self.view.scene.board.grid.update()
