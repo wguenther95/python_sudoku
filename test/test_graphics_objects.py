@@ -71,7 +71,7 @@ class Grid(SudokuItem):
                 height = self.parent.height / 9
                 rect = QRectF(x, y, width, height)
                 num = self.parent.game.board[i][j]
-                if num != 0:
+                if num != 0 and num == self.parent.game.initial_board[i][j]:
                     disabled = True
                 rect_row.append(rect)
                 ni_row.append(NumberItem(self, i, j, num, rect, disabled))
