@@ -1,4 +1,4 @@
-from random import shuffle, randint
+from random import shuffle, randint, randrange
 from enum import Enum
 from copy import deepcopy
 
@@ -125,6 +125,44 @@ class SudokuGenerator:
         self.generate()
 
         self.initial_board = deepcopy(self.board)
+
+    def hint(self, board):
+        find = self.find_empty(self.board)
+        if not find:
+            return False
+
+        i = randrange(0, 9)
+        j = randrange(0, 9)
+
+        if board[i][j] == 0:
+            temp_board = deepcopy(board)
+            if self.solve(temp_board):
+                board[i][j] = temp_board[i][j]
+                self.board = board
+                return True
+
+        if self.hint(board):
+            return True
+
+    def check_game_over(self):
+        find = self.find_empty(self.board)
+        if find:
+            return False
+
+        for i in range(9):
+            for j in range(9):
+                # Put the value at that position in a temporary value to check for
+                # collisions in rows, columns and 3 x 3 grid. If no exceptions are
+                # found, return the value to that position on the board. Otherwise,
+                # return False, as the board is not valid.
+                num = self.board[i][j]
+                self.board[i][j] = 0
+                if self.check_input(num, i, j, self.board):
+                    self.board[i][j] = num
+                else:
+                    return False
+
+        return True
 
 
 if __name__ == '__main__':

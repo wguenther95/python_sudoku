@@ -9,6 +9,7 @@ class GameControl(QDockWidget):
 
     start_new_game = pyqtSignal()
     solve = pyqtSignal()
+    hint = pyqtSignal()
     width = 150
 
     def __init__(self):
@@ -29,6 +30,9 @@ class GameControl(QDockWidget):
         self.solve_puzzle = QPushButton("Solve")
         self.solve_puzzle.clicked.connect(self.solve_clicked)
 
+        self.hint_button = QPushButton("Hint")
+        self.hint_button.clicked.connect(self.hint_clicked)
+
         self.timer = DigitalTimer()
 
         spacer = QSpacerItem(self.width, 400, QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -36,6 +40,7 @@ class GameControl(QDockWidget):
         layout.addWidget(self.difficulty_cb)
         layout.addWidget(self.new_game)
         layout.addWidget(self.solve_puzzle)
+        layout.addWidget(self.hint_button)
         layout.addSpacerItem(spacer)
         layout.addWidget(self.timer)
 
@@ -55,3 +60,6 @@ class GameControl(QDockWidget):
 
     def solve_clicked(self):
         self.solve.emit()
+
+    def hint_clicked(self):
+        self.hint.emit()

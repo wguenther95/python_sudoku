@@ -17,6 +17,5 @@ Highlight values which conflict with invalid user input in red after backtrackin
 Source Features:
 
 Check for game over condition on user input.
-Implement a game over overlay which shows on top of the board when a solution is found.
-Implement a hint feature, which chooses a random empty cell, and finds a correct value for that cell. 
+Determine what to do when asking for hint and user input is invalid. 
 Implement scaling so that moving between different resolutions doesn't cause issues with resizing. 

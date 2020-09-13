@@ -24,6 +24,7 @@ class Window(QMainWindow):
         self.game_control = GameControl()
         self.game_control.start_new_game.connect(self.new_game)
         self.game_control.solve.connect(self.solve_game)
+        self.game_control.hint.connect(self.hint)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.game_control)
 
         # Overlay to display when a solution has been found.
@@ -75,6 +76,16 @@ class Window(QMainWindow):
             self.game_control.solve_puzzle.setEnabled(False)
             self.view.scene.board.setEnabled(False)
             self.game_over.setVisible(True)
+
+    def hint(self):
+        game = self.view.scene.board.game
+        if game.hint(game.board):
+            self.view.scene.board.grid.update()
+
+        if game.check_game_over():
+            self.view.scene.board.setEnabled(False)
+            self.game_over.setVisible(True)
+            self.game_control.timer.pause()
 
 
 class View(QGraphicsView):
