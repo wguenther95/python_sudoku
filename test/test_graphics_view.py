@@ -27,10 +27,12 @@ class Window(QMainWindow):
         self.game_control.hint.connect(self.hint)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.game_control)
 
+        self.view.scene.board.game_over.connect(self.game_over)
+
         # Overlay to display when a solution has been found.
         # Initialize it as not visible, to be toggled later.
-        self.game_over = GameOverOverlay(self.view.scene.board)
-        self.game_over.setVisible(False)
+        self.game_over_overlay = GameOverOverlay(self.view.scene.board)
+        self.game_over_overlay.setVisible(False)
 
         self.resize(1200, 1200)
         self.setWindowTitle("Sudoku Puzzle")
@@ -55,7 +57,7 @@ class Window(QMainWindow):
         board.game.new_board()
         board.grid.update()
         self.view.scene.board.setEnabled(True)
-        self.game_over.setVisible(False)
+        self.game_over_overlay.setVisible(False)
 
         # Enable the solve button to show the user the solution.
         self.game_control.solve_puzzle.setEnabled(True)
@@ -72,14 +74,15 @@ class Window(QMainWindow):
         # Disable the board and set the game over overlay as visible.
         if game.solve(solved_board):
             self.view.scene.board.grid.show_solution(solved_board, game.initial_board)
-            self.game_control.timer.pause()
+            self.game_over()
             self.game_control.solve_puzzle.setEnabled(False)
-            self.view.scene.board.setEnabled(False)
-            self.game_over.setVisible(True)
 
     def hint(self):
         # Make sure all focused and selected items are cleared upon requesting hint.
         for item in self.view.scene.board.grid.childItems():
+            if not item.valid_input:
+                item.num = ''
+                item.game.board[item.row][item.col] = 0
             item.setSelected(False)
             item.setFocus(False)
 
@@ -88,9 +91,12 @@ class Window(QMainWindow):
             self.view.scene.board.grid.update()
 
         if game.check_game_over():
-            self.view.scene.board.setEnabled(False)
-            self.game_over.setVisible(True)
-            self.game_control.timer.pause()
+            self.game_over()
+
+    def game_over(self):
+        self.view.scene.board.setEnabled(False)
+        self.game_over_overlay.setVisible(True)
+        self.game_control.timer.pause()
 
 
 class View(QGraphicsView):

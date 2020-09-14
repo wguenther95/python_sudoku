@@ -9,13 +9,12 @@ Last Edited: August 27th, 2020
 
 GUI Features:
 
-Highlight values which conflict with invalid user input in red after backtracking.
+Stylesheets for widgets. 
+Formatting of game over overlay. 
 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 
 Source Features:
 
-Check for game over condition on user input.
-Determine what to do when asking for hint and user input is invalid. 
 Implement scaling so that moving between different resolutions doesn't cause issues with resizing. 

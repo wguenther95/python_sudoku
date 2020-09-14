@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsGridLayout, QGraphicsItem, QStyleOptionGraphicsItem, QGraphicsObject
 from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont, QPainterPath
-from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer
+from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer, pyqtSignal
 
 from time import time
 from copy import deepcopy
@@ -19,6 +19,7 @@ class Board(SudokuItem):
 
     height = 540.0
     width = 540.0
+    game_over = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -199,13 +200,21 @@ class NumberItem(SudokuItem):
         self.setFocus(True)
 
     def keyPressEvent(self, e):
+        # Only act on the item that currently has keyboard focus.
         if self.hasFocus():
+            # On backspace or delete, remove the current number from spot.
             if e.key() == 16777219 or e.key() == 16777223:
                 self.num = ''
                 self.game.board[self.row][self.col] = 0
             elif e.key() >= 49 and e.key() <= 57:
+                # If the number already exists in spot, do nothing.
+                if e.key() - 48 == self.num:
+                    return
+
+                # Otherwise, set the number to the key that was pressed.
                 self.num = str(e.key() - 48)
 
+                # Check if entered number is valid.
                 if self.game.check_input(int(self.num), self.row, self.col, self.game.board):
                     self.valid_input = True
                 else:
@@ -214,6 +223,9 @@ class NumberItem(SudokuItem):
                 self.game.board[self.row][self.col] = int(self.num)
 
             self.update()
+
+            if self.parent.parent.game.check_game_over():
+                self.parent.parent.game_over.emit()
 
     def animations(self):
         scale_value = 1.1
