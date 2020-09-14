@@ -239,7 +239,7 @@ class NumberItem(SudokuItem):
         self.scale_anim.start()
 
 
-class GameOverOverlay(QGraphicsObject):
+class GameOverOverlay(SudokuItem):
 
     width = Board().width * 2 / 3
     height = Board().height * 1 / 4
@@ -261,8 +261,14 @@ class GameOverOverlay(QGraphicsObject):
         painter.setBrush(brush)
         painter.setRenderHint(QPainter.Antialiasing)
 
+        time = self.parent.scene().views()[0].parent().game_control.timer.time.toString('mm:ss')
+        print(time)
+
+        rect = QRectF(self.x, self.y, self.width, self.height)
+        string = f'Congratulations, you have found a solution in {time}! Use the New Game button to start over.'
+
         path = QPainterPath()
-        path.addRoundedRect(QRectF(self.x, self.y, self.width, self.height), 10, 10)
-        path.addText(self.x, self.y, font, "Solution Found!")
+        path.addRoundedRect(rect, 10, 10)
         painter.drawPath(path)
         painter.fillPath(path, QColor(200, 255, 180))
+        painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap, string)

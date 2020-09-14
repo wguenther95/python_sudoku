@@ -61,6 +61,7 @@ class Window(QMainWindow):
 
         # Enable the solve button to show the user the solution.
         self.game_control.solve_puzzle.setEnabled(True)
+        self.game_control.hint_button.setEnabled(True)
 
     def solve_game(self):
         # Current game being used by the player.
@@ -75,7 +76,6 @@ class Window(QMainWindow):
         if game.solve(solved_board):
             self.view.scene.board.grid.show_solution(solved_board, game.initial_board)
             self.game_over()
-            self.game_control.solve_puzzle.setEnabled(False)
 
     def hint(self):
         # Make sure all focused and selected items are cleared upon requesting hint.
@@ -97,6 +97,8 @@ class Window(QMainWindow):
         self.view.scene.board.setEnabled(False)
         self.game_over_overlay.setVisible(True)
         self.game_control.timer.pause()
+        self.game_control.solve_puzzle.setEnabled(False)
+        self.game_control.hint_button.setEnabled(False)
 
 
 class View(QGraphicsView):
