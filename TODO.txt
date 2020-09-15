@@ -10,7 +10,6 @@ Last Edited: August 27th, 2020
 GUI Features:
 
 Stylesheets for widgets. 
-Formatting of game over overlay. 
 Implement scaling so that moving between different resolutions doesn't cause issues with resizing.
 
 ---------------------------------------------------------------------------------------------
