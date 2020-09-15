@@ -35,7 +35,7 @@ class Window(QMainWindow):
         self.game_over_overlay = GameOverOverlay(self.view.scene.board)
         self.game_over_overlay.setVisible(False)
 
-        self.resize(1200, 1200)
+        self.setFixedSize(800, 600)
         self.setWindowTitle("Sudoku Puzzle")
         self.show()
 

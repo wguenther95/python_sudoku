@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsGridLayout, QGraphicsItem, QStyleOptionGraphicsItem, QGraphicsObject
-from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont, QPainterPath, QTransform
+from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont, QPainterPath
 from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer, pyqtSignal
 
 from time import time
