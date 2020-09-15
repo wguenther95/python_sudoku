@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QGraphicsWidget, QGraphicsGridLayout, QGraphicsItem, QStyleOptionGraphicsItem, QGraphicsObject
-from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont, QPainterPath
+from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QColor, QFont, QPainterPath, QTransform
 from PyQt5.QtCore import Qt, QLineF, QRectF, QPropertyAnimation, QAbstractAnimation, QPointF, QTimer, pyqtSignal
 
 from time import time
@@ -58,6 +58,9 @@ class Grid(SudokuItem):
         self.update()
 
     def update(self):
+        # Clear the board so items aren't stacked on top of each other.
+        self.clear_board()
+
         self.number_items = []
         self.rects = []
 
@@ -111,6 +114,10 @@ class Grid(SudokuItem):
 
     def boundingRect(self):
         return QRectF(0, 0, self.parent.width, self.parent.height)
+
+    def clear_board(self):
+        for item in self.childItems():
+            self.scene().removeItem(item)
 
 class NumberItem(SudokuItem):
 
@@ -262,7 +269,6 @@ class GameOverOverlay(SudokuItem):
         painter.setRenderHint(QPainter.Antialiasing)
 
         time = self.parent.scene().views()[0].parent().game_control.timer.time.toString('mm:ss')
-        print(time)
 
         rect = QRectF(self.x, self.y, self.width, self.height)
         string = f'Congratulations, you have found a solution in {time}! Use the New Game button to start over.'
@@ -270,5 +276,10 @@ class GameOverOverlay(SudokuItem):
         path = QPainterPath()
         path.addRoundedRect(rect, 10, 10)
         painter.drawPath(path)
-        painter.fillPath(path, QColor(200, 255, 180))
+
+        fill_color = QColor(200, 255, 180)
+        fill_color.setAlphaF(0.5)
+        fill_brush = QBrush(fill_color, Qt.SolidPattern)
+
+        painter.fillPath(path, fill_brush)
         painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap, string)

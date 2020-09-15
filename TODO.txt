@@ -11,10 +11,11 @@ GUI Features:
 
 Stylesheets for widgets. 
 Formatting of game over overlay. 
+Implement scaling so that moving between different resolutions doesn't cause issues with resizing.
 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 
-Source Features:
-
-Implement scaling so that moving between different resolutions doesn't cause issues with resizing. 
+Source:
+ 
+Resolve issue where numbers entered twice are creating an error. 

@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt, QRectF
 import sys
 import os
 from copy import deepcopy
+from time import time
 
 from test_graphics_objects import Board, GameOverOverlay
 from test_dock_widget import GameControl
@@ -87,8 +88,10 @@ class Window(QMainWindow):
             item.setFocus(False)
 
         game = self.view.scene.board.game
+
         if game.hint(game.board):
             self.view.scene.board.grid.update()
+        end = time()
 
         if game.check_game_over():
             self.game_over()
