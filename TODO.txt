@@ -19,3 +19,4 @@ Implement scaling so that moving between different resolutions doesn't cause iss
 Source:
  
 Resolve issue where numbers entered twice are creating an error. 
+Implement undo button to undo last input. 
