@@ -32,7 +32,6 @@ class Board(SudokuItem):
         self.grid = Grid(self)
 
     def paint(self, painter, option, widget):
-        painter.fillRect(self.boundingRect(), Qt.white)
 
         pen = QPen(Qt.black, 3)
         painter.setPen(pen)
@@ -167,8 +166,6 @@ class NumberItem(SudokuItem):
             brush = QBrush(QColor(160, 200, 255), Qt.SolidPattern)
         else:
             rect = self.rect
-        # Fill in the background, so items don't remain painted in the case of a new game initialization.
-        painter.fillRect(rect, Qt.white)
 
         painter.setBrush(brush)
         painter.setFont(QFont('Helvetica', 14, 50))
@@ -207,6 +204,8 @@ class NumberItem(SudokuItem):
         self.setFocus(True)
 
     def keyPressEvent(self, e):
+        self.parent.parent.game.print()
+        print()
         # Only act on the item that currently has keyboard focus.
         if self.hasFocus():
             # On backspace or delete, remove the current number from spot.
@@ -215,7 +214,7 @@ class NumberItem(SudokuItem):
                 self.game.board[self.row][self.col] = 0
             elif e.key() >= 49 and e.key() <= 57:
                 # If the number already exists in spot, do nothing.
-                if e.key() - 48 == self.num:
+                if str(e.key() - 48) == self.num:
                     return
 
                 # Otherwise, set the number to the key that was pressed.
