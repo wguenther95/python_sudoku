@@ -10,12 +10,11 @@ Last Edited: August 27th, 2020
 GUI Features:
 
 Stylesheets for widgets. 
-Implement scaling so that moving between different resolutions doesn't cause issues with resizing.
 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 
 Source:
  
-Resolve issue where numbers entered twice are creating an error. 
 Implement undo button to undo last input. 
+Implement backtracking game over check switch. When activated, run full backtracking algorithm on users last input. 
