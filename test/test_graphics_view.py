@@ -8,6 +8,7 @@ from time import time
 from test_graphics_objects import Board, GameOverOverlay
 from test_dock_widget import GameControl
 from test_generator import Difficulty
+from test_style import style
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
@@ -137,6 +138,7 @@ class Scene(QGraphicsScene):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyleSheet(style)
 
     ex = Window()
 
