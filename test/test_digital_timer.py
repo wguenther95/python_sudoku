@@ -16,6 +16,8 @@ class DigitalTimer(QLCDNumber):
 
         self.restart()
 
+        self.setFixedHeight(50)
+
     def show_time(self):
         self.time = self.time.addSecs(1)
         self.string = self.time.toString('mm:ss')

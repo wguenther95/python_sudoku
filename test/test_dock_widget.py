@@ -35,7 +35,7 @@ class GameControl(QDockWidget):
 
         self.timer = DigitalTimer()
 
-        spacer = QSpacerItem(self.width, 400, QSizePolicy.Fixed, QSizePolicy.Fixed)
+        spacer = QSpacerItem(self.width, 0, QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         layout.addWidget(self.difficulty_cb)
         layout.addWidget(self.new_game)
