@@ -82,6 +82,9 @@ class Grid(SudokuItem):
             self.rects.append(rect_row)
 
     def show_solution(self, solved_board, initial_board):
+        # Clear the board so items aren't stacked on top of each other.
+        self.clear_board()
+
         self.number_items = []
         self.rects = []
 
