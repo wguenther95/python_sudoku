@@ -260,11 +260,8 @@ class GameOverOverlay(SudokuItem):
         return QRectF(0, 0, self.width, self.height)
 
     def paint(self, painter, option, widget):
-        pen = QPen(Qt.black, 5)
-        brush = QBrush(QColor(255, 255, 255), Qt.SolidPattern)
-        font = (QFont('Helvetica', 14, 50))
+        pen = QPen(QColor('#455A64'), 5)
         painter.setPen(pen)
-        painter.setBrush(brush)
         painter.setRenderHint(QPainter.Antialiasing)
 
         time = self.parent.scene().views()[0].parent().game_control.timer.time.toString('mm:ss')
@@ -276,9 +273,14 @@ class GameOverOverlay(SudokuItem):
         path.addRoundedRect(rect, 10, 10)
         painter.drawPath(path)
 
-        fill_color = QColor(200, 255, 180)
-        fill_color.setAlphaF(0.5)
+        fill_color = QColor('#CFD8DC')
+        fill_color.setAlphaF(0.9)
         fill_brush = QBrush(fill_color, Qt.SolidPattern)
 
         painter.fillPath(path, fill_brush)
+
+        font_pen = QPen(Qt.black, 1)
+        painter.setPen(font_pen)
+        font = (QFont('Helvetica', 14, 50))
+        painter.setFont(font)
         painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap, string)

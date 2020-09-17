@@ -18,4 +18,5 @@ Resource management, and icons for buttons. Convert to QToolButtons
 Source:
  
 Implement undo button to undo last input. 
-Implement backtracking game over check switch. When activated, run full backtracking algorithm on users last input. 
+Implement backtracking game over check switch. When activated, run full backtracking algorithm on users last input. \
+When the solve button is pushed, make sure hints aren't overwritten.
