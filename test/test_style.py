@@ -1,5 +1,3 @@
-
-
 style = """
     /*
     Color Variables for Reference
@@ -27,10 +25,6 @@ style = """
         background-color:#455A64;
     }
 
-    QPushButton:!hover{
-        background-color:#607D8B;
-    }
-
     QPushButton:disabled{
         background-color:#BDBDBD;
     }
@@ -40,8 +34,16 @@ style = """
         color:#212121;
     }
 
+    QComboBox:drop-down{
+        background-color:#607D8B;
+    }
+
+    QComboBox:drop-down:hover{
+        background-color:#455A64;
+    }
+
     QDockWidget:title{
-        text-align:right;
+        text-align:center;
         color:#212121;
     }
 
