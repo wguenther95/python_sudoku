@@ -27,6 +27,7 @@ class Window(QMainWindow):
         self.game_control.start_new_game.connect(self.new_game)
         self.game_control.solve.connect(self.solve_game)
         self.game_control.hint.connect(self.hint)
+        self.game_control.show_errors.connect(self.show_errors)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.game_control)
 
         self.view.scene.board.game_over.connect(self.game_over)
@@ -92,10 +93,23 @@ class Window(QMainWindow):
 
         if game.hint(game.board):
             self.view.scene.board.grid.update()
-        end = time()
 
         if game.check_game_over():
             self.game_over()
+
+    def show_errors(self):
+        self.view.scene.board.show_errors = self.game_control.check_chb.isChecked()
+        self.view.scene.board.grid.update()
+
+        if self.game_control.check_chb.isChecked() == True:
+            for item in self.view.scene.board.grid.childItems():
+                if not item.disabled and not item.num == '':
+                    board = deepcopy(self.view.scene.board.game.board)
+                    num = item.num
+                    board[item.row][item.col] = 0
+                    if not self.view.scene.board.game.check_input(num, item.row, item.col, board):
+                        item.valid_input = False
+                        item.update()
 
     def game_over(self):
         self.view.scene.board.setEnabled(False)

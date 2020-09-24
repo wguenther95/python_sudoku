@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QDockWidget, QWidget, QHBoxLayout, QVBoxLayout,
                              QPushButton, QGroupBox, QComboBox, QLabel, QSpacerItem,
-                             QSizePolicy)
+                             QSizePolicy, QCheckBox)
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal
 
 from test_digital_timer import DigitalTimer
@@ -10,6 +10,7 @@ class GameControl(QDockWidget):
     start_new_game = pyqtSignal()
     solve = pyqtSignal()
     hint = pyqtSignal()
+    show_errors = pyqtSignal()
     width = 150
 
     def __init__(self):
@@ -33,6 +34,10 @@ class GameControl(QDockWidget):
         self.hint_button = QPushButton("Hint")
         self.hint_button.clicked.connect(self.hint_clicked)
 
+        self.check_chb = QCheckBox("Show errors")
+        self.check_chb.setChecked(True)
+        self.check_chb.clicked.connect(self.check_box_clicked)
+
         self.timer = DigitalTimer()
 
         spacer = QSpacerItem(self.width, 0, QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -41,6 +46,7 @@ class GameControl(QDockWidget):
         layout.addWidget(self.new_game)
         layout.addWidget(self.solve_puzzle)
         layout.addWidget(self.hint_button)
+        layout.addWidget(self.check_chb)
         layout.addSpacerItem(spacer)
         layout.addWidget(self.timer)
 
@@ -63,3 +69,6 @@ class GameControl(QDockWidget):
 
     def hint_clicked(self):
         self.hint.emit()
+
+    def check_box_clicked(self):
+        self.show_errors.emit()

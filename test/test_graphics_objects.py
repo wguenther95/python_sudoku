@@ -20,6 +20,7 @@ class Board(SudokuItem):
     height = 540.0
     width = 540.0
     game_over = pyqtSignal()
+    show_errors = True
 
     def __init__(self):
         super().__init__()
@@ -175,7 +176,7 @@ class NumberItem(SudokuItem):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.drawEllipse(rect)
 
-        if not self.valid_input:
+        if self.parent.parent.show_errors and not self.valid_input:
             painter.setPen(red_pen)
 
         painter.drawText(rect, Qt.AlignCenter, f'{self.num}')
@@ -207,7 +208,6 @@ class NumberItem(SudokuItem):
         self.setFocus(True)
 
     def keyPressEvent(self, e):
-        self.parent.parent.game.print()
         print()
         # Only act on the item that currently has keyboard focus.
         if self.hasFocus():
@@ -223,8 +223,11 @@ class NumberItem(SudokuItem):
                 # Otherwise, set the number to the key that was pressed.
                 self.num = str(e.key() - 48)
 
-                # Check if entered number is valid.
-                if self.game.check_input(int(self.num), self.row, self.col, self.game.board):
+                board_copy = deepcopy(self.game.board)
+                board_copy[self.row][self.col] = int(self.num)
+
+                # Check to make sure that there are no overlaps in columns, and rows, and the board is solveable.
+                if self.game.solve(board_copy) and self.game.check_input(int(self.num), self.row, self.col, self.game.board):
                     self.valid_input = True
                 else:
                     self.valid_input = False
