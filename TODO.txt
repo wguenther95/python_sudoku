@@ -9,7 +9,6 @@ Last Edited: August 27th, 2020
 
 GUI Features:
 
-Stylesheets for widgets. 
 Resource management, and icons for buttons. Convert to QToolButtons
 
 ---------------------------------------------------------------------------------------------
