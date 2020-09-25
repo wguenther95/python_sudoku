@@ -37,6 +37,7 @@ style = f"""
     QToolButton{{
         background-color:#607D8B;
         color: #FFFFFF;
+        font-size:10px;
     }}
 
     QToolButton:hover{{
@@ -77,5 +78,9 @@ style = f"""
 
     QLCDNumber{{
         background-color:white;
+    }}
+
+    QCheckBox {{
+        font-size:10px;
     }}
     """

@@ -98,10 +98,10 @@ class Window(QMainWindow):
             self.game_over()
 
     def show_errors(self):
-        self.view.scene.board.show_errors = self.game_control.check_chb.isChecked()
+        self.view.scene.board.show_errors = self.game_control.check_errors.isChecked()
         self.view.scene.board.grid.update()
 
-        if self.game_control.check_chb.isChecked() == True:
+        if self.game_control.check_errors.isChecked() == True:
             for item in self.view.scene.board.grid.childItems():
                 if not item.disabled and not item.num == '':
                     board = deepcopy(self.view.scene.board.game.board)
