@@ -1,4 +1,9 @@
-style = """
+from pathlib import Path
+
+down_arrow = str(Path(__file__).parent.parent / "resources" / "down_arrow.png")
+down_arrow = down_arrow.replace("\\", "/")
+
+style = f"""
     /*
     Color Variables for Reference
     -------------------------------------------------------------
@@ -12,46 +17,65 @@ style = """
     Divider Color = #BDBDBD
     */
 
-    .QWidget{
+    .QWidget{{
         background-color:#CFD8DC;
-    }
+    }}
 
-    QPushButton{
+    QPushButton{{
         background-color:#607D8B;
         color: #FFFFFF;
-    }
+    }}
 
-    QPushButton:hover{
+    QPushButton:hover{{
         background-color:#455A64;
-    }
+    }}
 
-    QPushButton:disabled{
+    QPushButton:disabled{{
         background-color:#BDBDBD;
-    }
+    }}
 
-    QComboBox{
+    QToolButton{{
+        background-color:#607D8B;
+        color: #FFFFFF;
+    }}
+
+    QToolButton:hover{{
+        background-color:#455A64;
+    }}
+
+    QToolButton:disabled{{
+        background-color:#BDBDBD;
+    }}
+
+    QComboBox{{
         background-color:#FFFFFF;
         color:#212121;
-    }
+    }}
 
-    QComboBox:drop-down{
+    QComboBox:drop-down{{
         background-color:#607D8B;
-    }
+    }}
 
-    QComboBox:drop-down:hover{
+    QComboBox:drop-down:hover{{
         background-color:#455A64;
-    }
+    }}
 
-    QDockWidget:title{
+    QComboBox::down-arrow {{
+        image:url("{down_arrow}");
+        width:14px;
+        height:14px;
+    }}
+
+    QDockWidget:title{{
         text-align:center;
         color:#212121;
-    }
+    }}
 
-    QAbstractScrollArea{
+    QAbstractScrollArea{{
         background-color:white;
-    }
+    }}
 
-    QLCDNumber{
+    QLCDNumber{{
         background-color:white;
-    }
+    }}
     """
