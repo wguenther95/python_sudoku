@@ -45,13 +45,13 @@ class SudokuGenerator:
         return False
 
     def generate(self):
-        # Easy sudoku boards will contain 36 clues, medium will contain 31 clues, and hard will contain 22 clues.
+        # Easy sudoku boards will contain 36 clues, medium will contain 31 clues, and hard will contain 24 clues.
         if self.difficulty == Difficulty.EASY:
             counter = 81 - 37
         elif self.difficulty == Difficulty.MEDIUM:
             counter = 81 - 32
         elif self.difficulty == Difficulty.HARD:
-            counter = 81 - 23
+            counter = 81 - 25
 
         while counter >= 0:
             rand_row = randint(0, 8)
@@ -122,7 +122,6 @@ class SudokuGenerator:
         return None
 
     def new_board(self):
-        print("new board")
         self.board = [[0 for col in range(9)] for row in range(9)]
         self.solve(self.board)
         self.generate()

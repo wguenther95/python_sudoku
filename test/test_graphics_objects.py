@@ -230,7 +230,7 @@ class NumberItem(SudokuItem):
                 board_copy[self.row][self.col] = int(self.num)
 
                 # Check to make sure that there are no overlaps in columns, and rows, and the board is solveable.
-                if self.game.solve(board_copy) and self.game.check_input(int(self.num), self.row, self.col, self.game.board):
+                if self.game.check_input(int(self.num), self.row, self.col, self.game.board):
                     self.valid_input = True
                 else:
                     self.valid_input = False

@@ -18,4 +18,3 @@ Resource management, and icons for buttons. Convert to QToolButtons
 Source:
  
 Implement undo button to undo last input. 
-Check hint to make sure show error checkbox doesn't throw errors.
