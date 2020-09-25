@@ -1,6 +1,8 @@
 from random import shuffle, randint, randrange
 from enum import Enum
 from copy import deepcopy
+import numpy as np
+import inspect
 
 
 class Difficulty(Enum):
@@ -120,6 +122,7 @@ class SudokuGenerator:
         return None
 
     def new_board(self):
+        print("new board")
         self.board = [[0 for col in range(9)] for row in range(9)]
         self.solve(self.board)
         self.generate()

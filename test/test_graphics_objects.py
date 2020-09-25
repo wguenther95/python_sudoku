@@ -7,6 +7,9 @@ from copy import deepcopy
 
 from test_generator import SudokuGenerator
 
+BOARD_HEIGHT = 540.0
+BOARD_WIDTH = 540.0
+
 
 class SudokuItem(QGraphicsObject):
     def __init__(self, parent=None):
@@ -17,8 +20,8 @@ class SudokuItem(QGraphicsObject):
 
 class Board(SudokuItem):
 
-    height = 540.0
-    width = 540.0
+    height = BOARD_HEIGHT
+    width = BOARD_WIDTH
     game_over = pyqtSignal()
     show_errors = True
 
@@ -253,14 +256,14 @@ class NumberItem(SudokuItem):
 
 class GameOverOverlay(SudokuItem):
 
-    width = Board().width * 2 / 3
-    height = Board().height * 1 / 4
+    width = BOARD_WIDTH * 2 / 3
+    height = BOARD_HEIGHT * 1 / 4
 
     def __init__(self, board):
         super().__init__(parent=board)
 
-        self.x = (Board().width - self.width) / 2
-        self.y = (Board().height / 2) + (Board().height / 6)
+        self.x = (BOARD_WIDTH - self.width) / 2
+        self.y = (BOARD_HEIGHT / 2) + (BOARD_HEIGHT / 6)
 
     def boundingRect(self):
         return QRectF(0, 0, self.width, self.height)
