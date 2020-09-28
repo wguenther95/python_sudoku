@@ -8,4 +8,4 @@ This project was built with the intention of exploring backtracking algorithms a
 
 This project was written in Python 3.7, and the GUI was written using the popular Python wrapper for Qt, PyQt5. An image of the GUI interface is shown below. 
 
-![Screenshot of GUI](C:/Dev/python_sudoku/GUI_Screenshot.png)
+![](GUI_Screenshot.png)
