@@ -1,5 +1,7 @@
 # Python Sudoku Application
 
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+
 Simple Sudoku game with GUI, utilizing backtracking algorithm to create games of multiple difficulties. 
 
 ### Description
